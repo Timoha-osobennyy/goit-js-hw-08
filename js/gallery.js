@@ -46,24 +46,30 @@ const images = [
   },
 ];
 const galleryContainer = document.querySelector('.gallery');
-const imagesPerColumn = Math.ceil(images.length / 3); 
+const imagesPerColumn = Math.ceil(images.length / 3);
+const fragment = document.createDocumentFragment(); // Створення фрагмента документа
 
 for (let i = 0; i < 3; i++) {
-  const column = document.createElement('ul'); 
+  const column = document.createElement('ul');
   column.className = 'gallery-column';
-  
-  images.slice(i * imagesPerColumn, (i + 1) * imagesPerColumn).forEach(({ preview, original, description }) => {
-    column.insertAdjacentHTML('beforeend', `
-      <li class="gallery-item">
-        <a href="${original}" class="gallery-link">
-          <img src="${preview}" data-source="${original}" alt="${description}">
-        </a>
-      </li>
-    `);
-  });
-  
-  galleryContainer.appendChild(column);
+
+  images
+    .slice(i * imagesPerColumn, (i + 1) * imagesPerColumn)
+    .forEach(({ preview, original, description }) => {
+      const itemHTML = `
+        <li class="gallery-item">
+          <a href="${original}" class="gallery-link">
+            <img src="${preview}" data-source="${original}" alt="${description}">
+          </a>
+        </li>
+      `;
+      column.insertAdjacentHTML('beforeend', itemHTML);
+    });
+
+  fragment.appendChild(column); // Додаємо колонку до фрагмента
 }
+
+galleryContainer.appendChild(fragment); // Додаємо весь фрагмент до контейнера
 
 galleryContainer.addEventListener('click', (event) => {
   event.preventDefault();
